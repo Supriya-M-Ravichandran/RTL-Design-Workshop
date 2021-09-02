@@ -21,7 +21,7 @@ A cloud based workshop on verilog coding guidelines, resulting in predictable lo
 #### Workshop Credits
 > VSD - Kunal Ghosh and Team: https://www.vlsisystemdesign.com/rtl-design-using-verilog-with-sky130-technology/
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Day 1
+# Day 1 
 
 ### _Highlights:_
 |#|TOPIC COVERED|
@@ -101,9 +101,9 @@ $ gtkwave tb_good_mux.vcd
 
 Additionally, the verilog and test bench modules can be accessed using the following command: 
 ```
-gvim tb_good_mux.v -o good_mux.v 
+$ gvim tb_good_mux.v -o good_mux.v 
 ```
-![image](https://user-images.githubusercontent.com/89927660/131779232-ca559d03-c7a4-4607-81bb-eedc9c0c1eca.png)
+![Screen Shot 2021-09-02 at 12 23 28 AM](https://user-images.githubusercontent.com/89927660/131786618-c6d4663f-5375-48dc-aa16-46b70e6797da.png)
 
 >_**Note:** Vim is a highly configurable text editor built to enable efficient text editing. gvim brings all the functionality, power, and features of Vim while adding the convenience and intuitive nature of a GUI environment._
 
@@ -141,6 +141,8 @@ $ synth -top good_mux
 $ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic
 $ show
+//Writing the netlist in a crisp manner 
+$ write_verilog -noattr good_mux_netlist.v
 ```
 
 **_Screenshot: Steps for Design Synthesis_**
@@ -151,7 +153,7 @@ $ show
 
 ![Screen Shot 2021-09-02 at 12 16 16 AM](https://user-images.githubusercontent.com/89927660/131785899-90b9720f-cd4f-489e-910e-dc9003137ef3.png)
 
-**_Screenshot: Inference from abc command_**
+**_Screenshot: Inference from abc command - Synthesized Netlist_**
 
 ![Screen Shot 2021-09-02 at 12 15 00 AM](https://user-images.githubusercontent.com/89927660/131785819-64cecf46-fef0-476d-af9c-25db68c1505a.png)
 
@@ -159,52 +161,48 @@ $ show
 
 ![Screen Shot 2021-09-02 at 12 14 23 AM](https://user-images.githubusercontent.com/89927660/131785750-c8f15d7f-eee1-4997-b825-52c677ff8df3.png)
 
+>_**Observation:** The Generated circuit thus has 2input NAND gate, Or And Inverted and Inverter. The output of this circuit is i1sel + i0sel'_
 
+**_Screenshot: Writing the Netlist_**
 
+![Screen Shot 2021-09-02 at 12 27 54 AM](https://user-images.githubusercontent.com/89927660/131787026-c7ba62b7-a7d1-4cee-a23b-319e7af7c2f5.png)
 
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
 # Day 2
-## Timing Libs, Hierarchial Vs Flat Synthesis and Efficient Flop Coding Styles
+
+### _Highlights:_
+|#|TOPIC COVERED|
+|:---:|:---:|
+|1.|[UNDERSTANDING THE LIBRARY](#understanding-the-library)|
+
+### UNDERSTANDING THE LIBRARY
+
+Command to open the library used in this workshop: sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+$ gvim ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+//to shut off the background colors/ syntax off:
+: syn off
+```
+
+For a design to work, there are three important parameters that determines how the Silicon works: Process (Variations due to Fabrications), Voltage (Changes in the behavior of the circuit) and Temperature (Sensitivity of semiconductors). Libraries are characterized to model these variations. 
+
+>sky130_fd_sc_hd__tt_025C_1v80.lib
+
+|PARAMETER|MEANING|
+|:---:|:---:|
+|SKY130|Technology - CMOS|
+|fd|Foundary - Skywater|
+|sc|Standard Cell - Digital|
+|hd|Density - High|
+|tt|Process - Typical|
+|025C|Temperature - Measure|
+|1v80|Voltage - Measure|
+
+.lib is a bucket of all standard cells that are available. The file also provides for every flavor of cells. 
+
+
+
+
+
+
+
