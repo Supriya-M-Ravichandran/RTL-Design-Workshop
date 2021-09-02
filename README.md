@@ -31,7 +31,7 @@ A cloud based workshop on verilog coding guidelines, resulting in predictable lo
 |3.|[SIMULATION FLOW](#simulation-flow)|
 |4.|[ENVIRONMENT SETUP](#environment-setup)|
 |5.|[MULTIPLEXER REVIEW](#multiplexer-review)|
-|6.|[IMPLEMENTATION OF A GOOD MUX USING IVERILOG](#implementation-of-a-good-mux-using-iverilog)|
+|6.|[GOOD MUX IMPLEMENTATION USING IVERILOG](#good-mux-implementation-using-iverilog)|
 |7.|[GTKWave ANALYSIS](#gtkwave-analysis)|
 |8.|[ACESSING MODULE FILES](#accessing-module-files)|
 |9.|[INTRODUCTION TO YOSYS AND LOGIC SYNTHESIS](#introduction-to-yosys-and-logic-synthesis)|
@@ -44,13 +44,13 @@ Fundamentally, Design is the actual Verilog code of set of Verilog codes which h
 
 ### DESIGN AND TEST BENCH MODULES
 
-to insert block diagram 
+![Screen Shot 2021-09-02 at 10 50 36 AM](https://user-images.githubusercontent.com/89927660/131876207-313df749-a7c5-46e8-9463-f7a2b41a6dc3.png)
 
 >_**Note:** Design module may have one or more primary inputs and primary outputs. However, testbench will not have any primary input or output._  
 
 ### SIMULATION FLOW
 
-to insert block diagram
+![Screen Shot 2021-09-02 at 10 57 07 AM](https://user-images.githubusercontent.com/89927660/131877209-116b4362-b56d-46ed-9f42-c7981a027158.png)
 
 >_**Note:** Simulator continuously checks for changes in the input. If there is an input change, the output is evaluated; else the simulator will never evaluate the output._
 
@@ -74,7 +74,7 @@ $ git clone https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
 
 ### MULTIPLEXER REVIEW
 
-### IMPLEMENTATION OF A GOOD MUX USING IVERILOG
+### GOOD MUX IMPLEMENTATION USING IVERILOG
 
 ```
 #Steps Followed:
@@ -108,10 +108,15 @@ $ gvim tb_good_mux.v -o good_mux.v
 >_**Note:** Vim is a highly configurable text editor built to enable efficient text editing. gvim brings all the functionality, power, and features of Vim while adding the convenience and intuitive nature of a GUI environment._
 
 ### INTRODUCTION TO YOSYS AND LOGIC SYNTHESIS
-Synthesizer is the tool that helps to convert RTL to netlist. Netlist is the representation of the design in the form of standard cells (in the form of the cells present in the .lib). Design and netlist file should be one and the same. 
+Synthesizer (Yosys) is the tool that helps to convert RTL to netlist. Netlist is the representation of the design in the form of standard cells (in the form of the cells present in the .lib). Design and netlist file should be one and the same. 
+
+![Screen Shot 2021-09-02 at 11 10 58 AM](https://user-images.githubusercontent.com/89927660/131879381-e7f010a5-545d-49a8-ae76-6d60ed221732.png)
+
 
 #### _But, How to Verify the Synthesis Output?_
-The stimulus should be same as the output observed in the RTL simulation. The design was written in Verilog code and netlist is the standard cell representation of the code. The set of primary inputs and primary outputs will remain the same between the RTL design and synthesized netlist. It implies that, we can use the same testbench as RTL design. 
+The stimulus should be same as the output observed in the RTL simulation. The design was written in Verilog code and netlist is the standard cell representation of the code. The set of primary inputs and primary outputs will remain the same between the RTL design and synthesized netlist. It implies that, we can use the same testbench as RTL design.
+
+![Screen Shot 2021-09-02 at 11 00 19 AM](https://user-images.githubusercontent.com/89927660/131877685-e2bba5af-59ac-4817-ab84-fb07556676da.png)
 
 #### _Logic Synthesis_
 RTL Design is the behavioral representation in HDL form for the required specification.
