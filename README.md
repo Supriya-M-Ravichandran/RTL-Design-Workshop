@@ -237,7 +237,6 @@ For a design to work, there are three important parameters that determines how t
 ![Screen Shot 2021-09-02 at 1 47 51 AM](https://user-images.githubusercontent.com/89927660/131796090-558e3d56-ea70-4d70-9dd9-8873bd353b43.png)
 
 
-wider cells are delay is less, faster but area is more
 
 
 
