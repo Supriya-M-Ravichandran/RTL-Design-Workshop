@@ -24,7 +24,7 @@ A cloud based workshop on verilog coding guidelines, resulting in predictable lo
 # Day 1 
 
 ### _Highlights:_
-|#|TOPIC COVERED|
+|#|TOPICS COVERED|
 |:---:|:---:|
 |1.|[INTRODUCTION TO VERILOG RTL DESIGN AND SYNTHESIS](#introduction-to-verilog-rtl-design-and-synthesis)|
 |2.|[DESIGN AND TEST BENCH MODULES](#design-and-test-bench-modules)|
@@ -171,11 +171,13 @@ $ write_verilog -noattr good_mux_netlist.v
 # Day 2
 
 ### _Highlights:_
-|#|TOPIC COVERED|
+|#|TOPICS COVERED|
 |:---:|:---:|
 |1.|[UNDERSTANDING THE LIBRARY](#understanding-the-library)|
 
 ### UNDERSTANDING THE LIBRARY
+
+For a design to work, there are three important parameters that determines how the Silicon works: Process (Variations due to Fabrications), Voltage (Changes in the behavior of the circuit) and Temperature (Sensitivity of semiconductors). Libraries are characterized to model these variations. 
 
 ```
 //Steps Followed:
@@ -187,11 +189,9 @@ $ gvim ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 : se nu
 ```
 
-For a design to work, there are three important parameters that determines how the Silicon works: Process (Variations due to Fabrications), Voltage (Changes in the behavior of the circuit) and Temperature (Sensitivity of semiconductors). Libraries are characterized to model these variations. 
-
 >sky130_fd_sc_hd__tt_025C_1v80.lib
 
-|PARAMETER|MEANING|
+|PARAMETERS|MEANING|
 |:---:|:---:|
 |SKY130|Technology - CMOS|
 |fd|Foundary - Skywater|
@@ -236,6 +236,7 @@ For a design to work, there are three important parameters that determines how t
 
 ![Screen Shot 2021-09-02 at 1 47 51 AM](https://user-images.githubusercontent.com/89927660/131796090-558e3d56-ea70-4d70-9dd9-8873bd353b43.png)
 
+>_**Note:** Comparison of area, power and delay
 
 
 
