@@ -118,12 +118,12 @@ RTL Design is the behavioral representation in HDL form for the required specifi
 
 But How to map the code with the hardware circuit? Synthesis - RTL to gate level translation. The design is converted into gates and the interconnections are made between the gates. This is given out as a file named as netlist. We take the RTL design, combine with .lib and synthesis it to get the netlist file. 
 
->_Note: .lib file is a collection of logical modules which includes all basic logic gates. It may also contain different flavors of the same gate (2 input AND, 3 input AND – slow, medium and fast version)._
+>_**Note:** .lib file is a collection of logical modules which includes all basic logic gates. It may also contain different flavors of the same gate (2 input AND, 3 input AND – slow, medium and fast version)._
 
 #### _Cell Selection_
 Fast and Slow cells comes with its own advantages and disadvantages when we consider the critical delays in combinational circuits. It is necessary to guide the synthesizer for selecting the cells that is optimum for implementing the logic circuits. This is called as _Constraints._ 
 
->_Note: Faster Cells lead to increased area and power, potentially leading to hold time violations. Slower Cells will result in slow circuits and may fail to meet the performance._
+>_**Note:** Faster Cells lead to increased area and power, potentially leading to hold time violations. Slower Cells will result in slow circuits and may fail to meet the performance._
 
 ### DESIGN LOGIC SYNTHESIS 
 
@@ -177,11 +177,14 @@ $ write_verilog -noattr good_mux_netlist.v
 
 ### UNDERSTANDING THE LIBRARY
 
-Command to open the library used in this workshop: sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
+//Steps Followed:
+//Command to open the libary file
 $ gvim ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-//to shut off the background colors/ syntax off:
+//To shut off the background colors/ syntax off:
 : syn off
+//To enable the line numbers
+: se nu
 ```
 
 For a design to work, there are three important parameters that determines how the Silicon works: Process (Variations due to Fabrications), Voltage (Changes in the behavior of the circuit) and Temperature (Sensitivity of semiconductors). Libraries are characterized to model these variations. 
@@ -198,7 +201,44 @@ For a design to work, there are three important parameters that determines how t
 |025C|Temperature - Measure|
 |1v80|Voltage - Measure|
 
-.lib is a bucket of all standard cells that are available. The file also provides for every flavor of cells. 
+**_Screenshot: .lib Sample File_**
+
+![Screen Shot 2021-09-02 at 1 17 28 AM](https://user-images.githubusercontent.com/89927660/131792266-d0d8a1e1-4831-4bd8-a642-9448fc478b25.png)
+
+### CONTENTS OF THE LIBRARY FILE
+
+.lib is a bucket of all standard cells that are available. The file also provides for every flavor of cells. For all combination of cells, it also contains the features of cells : Area, Power, Timing and Pin details, Capacitance to mention a few. 
+
+```
+//Steps Followed:
+//To view the Equivalent Verilog model (in order to understand the functionality of the cell)
+//to open without power ports
+:sp ../my_lib/verilog_model/sky_130_fd_sc_hd__a2111o.behavioral.v
+```
+
+**_Screenshot: .lib file containing the cell details for sky_130_fd_sc_hd__a2111o_1_**
+
+![Screen Shot 2021-09-02 at 1 26 58 AM](https://user-images.githubusercontent.com/89927660/131793727-de36696a-2cd4-4286-910d-0fbb2d1998cc.png)
+
+**_Screenshot: Equivalent Verilog Model for sky_130_fd_sc_hd__a2111o_1_**
+
+![Screen Shot 2021-09-02 at 1 29 16 AM](https://user-images.githubusercontent.com/89927660/131793892-821d9e15-228c-42a0-8d00-64b6ff819de0.png)
+
+>_**Note:** For this 5 input gate, there will be 2^5 = 32 combinations for each feature value (e.g leakage power consumption for all 32 combinations)._
+
+```
+//Steps Followed:
+//To open and cell 
+/cell .*and
+//To open variations of and cell in parallel
+:vsp
+```
+
+![Screen Shot 2021-09-02 at 1 47 51 AM](https://user-images.githubusercontent.com/89927660/131796090-558e3d56-ea70-4d70-9dd9-8873bd353b43.png)
+
+
+wider cells are delay is less, faster but area is more
+
 
 
 
