@@ -485,20 +485,24 @@ Note: No hardware requirements - No # of memories, memory bites, processes and c
 
 **_Screenshot: Graphical Realization of the Logic_**
 
-### OPTIMISATION TECHNIQUES PART 2
+### OPTIMIZATION TECHNIQUES PART 2
 
 >_**Note:** Incase if the input a has 3 bits and generated output has 5 bits. The relationship for the output is always a constant (say 9) times the input a. The number 9 can be split as 8 + 1, which replaces the output equation to be 8 times input a added with 000. _
 
 -----------------------------------------------------------------------------------------------------------------------------------------------
 # Day 2
 
-Logic Optimisation
-There are two types of digital logic circuits - combinational and sequential logic circuits. Combinational circuits are collection of basic logic gates, where the output depends only on the current inputs and do not require any clocks. They result in a simple circuit capable of implementing complex logic using logic gates only. Sequential circuits are collection of memory elements calls as flip-flops. The circuit's output depends on current input as well as the past intputs. Due to the presence of flip-flops, the output requires clock inputs. Hence, they result in a complex circuit capable of implmenting complex logic using memory.  
+Logic Circuits - Overview
 
-Why combi logic optimisation? 
+There are two types of digital logic circuits - _combinational and sequential logic circuits_. **_Combinational circuits_** are collection of basic logic gates, where the output depends only on the current inputs and do not require any clocks. They result in a simple circuit capable of implementing complex logic using logic gates only. **_Sequential circuits_** are collection of memory elements calls as flip-flops. The circuit's output depends on current input as well as the past intputs. Due to the presence of flip-flops, the output requires clock inputs. Hence, they result in a complex circuit capable of implmenting complex logic using memory.  
 
+Combinational Logic Optimization Techniques
 
+Logic optimization is a part of logic synthesis to find an equivalent representation of the specified logic circuit under one or more specified constraints. We perform in order to squeeze the logic and get the most optimized design which can lead to area and power savings. This can be achieved through Constant Propoation Method (Ex: Direct Optimisation) or through Boolean Logic Optimization (ex: K-Map or Quine-McCluskey Methods). In Constant Propogation, most optimized logic is obtained by propogating the value of one input is to the next stage and all the way to the output. In Boolean Logic Optimization, synthesis tools reduce complex logic equations to simplied version using boolean algebra/K-map reductions. 
 
+Sequential Logic Optimization Techniques
+
+One of the most basic Optimization Techniques for sequential circuits is the constant propogation method. At times of logic design when D input is tied Low, in order to optimize the sequential logic, the Q pin of flop should always have a constant value. There are also advanced techniques to obtain a most condensed state machine: 1) State Optimization where the unused states are being optimized. 2) Cloning way of logic is done during physical aware synthesis (where if two flops are sitting far off - there might be a large routing delay. To prevent this, a flip flop with huge positive slack can be cloned and the timing can be met). 3) Re-timing - the combinational logic is partitioned effectively to reduce the delay, thereby increasing the frequency of operation. Hence, the performance of the circuit is improved using this technique. 
 
 
 
