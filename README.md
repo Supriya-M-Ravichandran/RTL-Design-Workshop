@@ -761,4 +761,79 @@ $ show
 
 >_**Note:** The optimized graphical realization have the same flop inferred twice._
 
+### SEQUENTIAL UNUSED OUTPUT OPTIMIZATION 
+
+```
+//Steps Followed for each of the unused output optimization problems:
+//opening the file
+$ gvim counter_opt.v
+//Invoke Yosys
+$ yosys
+//Read library 
+$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+//Read Design
+$ read_verilog opt_check.v
+//Synthesize Design - this controls which module to synthesize
+$ synth -top opt_check
+//To perform constant propogation optimization
+$ opt_clean -purge
+//Generate Netlist
+$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+//Realizing Graphical Version of Logic for single modules
+$ show 
+```
+
+#### _CASE 1: counter_opt.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 3 06 31 AM](https://user-images.githubusercontent.com/89927660/132087686-2c95772e-1fb7-4fa2-9677-d66149f594da.png)
+
+![Screen Shot 2021-09-04 at 3 14 13 AM](https://user-images.githubusercontent.com/89927660/132087854-23ec6319-5b57-4a15-8453-ece548643537.png)
+
+>_**Note:** If there is a reset, the counter is intialised to 0, else it is incremented - performing like an upcounter. Since it is a 3 bit signal, the counter rolls back after 7. However, the final output q is sensing only the count [0], so the bit is toggling in every clock cycle (000, 001, 010 ...111). The other two outputs are unused and does not create any output dependency. Hence, these unused outpus need not be present in the design._
+
+**_Screenshot: Statistics showing only one flop inferred instead of 3 flops sinces it is a 3 bit counter_**
+
+![Screen Shot 2021-09-04 at 3 17 48 AM](https://user-images.githubusercontent.com/89927660/132087992-ae0ac308-e08c-43ee-bde0-2f6930afcaa3.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 3 19 22 AM](https://user-images.githubusercontent.com/89927660/132088002-39377ee7-f1d8-4abf-be43-3a5189e67fbd.png)
+
+>_**Note:** The optimized graphical realization output Q (count0) being fed to NOT gate so as to perform the toggle function. The other outputs which has no dependency on the primary out is optimized off._
+
+#### _CASE 2: counter_opt2.v_
+
+```
+//Steps Followed:
+//Copying the code to a new file
+$ cp counter_opt.v counter_opt2.v
+$ gvim counter_opt2.v
+//Changes made in the verilog code, i for insert mode: 
+- assign q = [count2:0] == 3'b100;
+```
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 3 36 58 AM](https://user-images.githubusercontent.com/89927660/132088508-f79a00ad-cd2c-451b-9521-ded1a1568e41.png)
+
+>_**Note:** In this case, all three bits of the counter is used and hence 3 flops are expected in the optimized netlist._
+
+**_Screenshot: Statistics showing all three flops inferred_**
+
+![Screen Shot 2021-09-04 at 3 37 53 AM](https://user-images.githubusercontent.com/89927660/132088576-83ccc9e4-01c8-4ba4-8cfe-a3b19b5d7ed9.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 3 38 54 AM](https://user-images.githubusercontent.com/89927660/132088587-4cf00ae0-5a41-45d7-b238-7f42d2e50ffd.png)
+
+>_**Note:** All three flops can be seen. There is a need for incremental logic, so the logic other than flops represent the adder circuit. The expression at the output is q = counter2.counter1'.counter0'. Therefore, the outputs having no direct role on the primary output will only be optimized away._
+
+
+
+
+
+
+
+
 
