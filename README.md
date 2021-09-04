@@ -498,6 +498,7 @@ Note: No hardware requirements - No # of memories, memory bites, processes and c
 |1.|[LOGIC CIRCUITS OVERVIEW](#logic-circuits-overview)|
 |2.|[COMBINATIONAL LOGIC OPTIMIZATION](#combinational-logic-optimization)|
 |3.|[SEQUENTIAL LOGIC OPTIMIZATION](#sequential-logic-optimization)|
+|4.|[SEQUENTIAL UNUSED OUTPUT OPTIMIZATION](#sequential-unused-output-optimization)|
 
 ### LOGIC CIRCUITS OVERVIEW
 
