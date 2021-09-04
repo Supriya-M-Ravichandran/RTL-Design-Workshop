@@ -883,6 +883,8 @@ $ gvim counter_opt2.v
 |1.|[GATE LEVEL SIMULATION](#gate-level-simulation)|
 |2.|[SYNTHESIS SIMULATION MISMATCH](#synthesis-simulation-mismatch)|
 |3.|[EXPERIMENTS WITH GLS](#experiments-with-GLS)|
+|4.|[MISSING SENSITIVITY LIST](#missing-sensitivity-list)|
+|5.|[CAVEATS IN BLOCKING ASSIGNMENTS](#caveats-in-blocking-assignments)|
 
 ### GATE LEVEL SIMULATION
 
@@ -1149,6 +1151,8 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 >_**Observation:** Confirms the functionality of 2x1 mux._
 
+### MISSING SENSITIVITY LIST
+
 #### _CASE 2: bad_mux.v showing mismatch due to missing sensitivity list_
 
 **_Screenshot: Verilog file_**
@@ -1178,6 +1182,8 @@ $ gtkwave tb_ternary_operator_mux.vcd
 ![Screen Shot 2021-09-04 at 3 12 13 PM](https://user-images.githubusercontent.com/89927660/132106949-edceae4c-0222-481f-9f09-04b04a36ed11.png)
 
 >_**Observation:** Confirms the functionality of 2x1 mux after synthesis where when the select is low, activity of input 0 is reflected on y. Similarly, when the select is hight, activity of input 1 is reflected on y. Hence there is a synthesis simulation mismatch due to missing sensitivity list._
+
+### CAVEATS IN BLOCKING ASSIGNMENTS
 
 #### _CASE 3: blocking_caveat.v showing mismatch due to blocking assignments_
 
@@ -1209,7 +1215,70 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 >_**Observation:** The value of output d is 0 after simulation and 1 after synthesis for the same set of input values. Hence there is a synthesis simulation mismatch due to blocking assignments._
 
+-----------------------------------------------------------------------------------------------------------------------------------------------
 
+# Day 4
 
+### _Highlights:_
+|#|TOPICS COVERED|
+|:---:|:---:|
+|1.|[GATE LEVEL SIMULATION](#gate-level-simulation)|
+|2.|[SYNTHESIS SIMULATION MISMATCH](#synthesis-simulation-mismatch)|
+|3.|[EXPERIMENTS WITH GLS](#experiments-with-GLS)|
+|4.|[MISSING SENSITIVITY LIST](#missing-sensitivity-list)|
+|5.|[CAVEATS IN BLOCKING ASSIGNMENTS](#caveats-in-blocking-assignments)|
 
+### IF STATEMENTS
 
+#### _Why IF Statements?_
+
+The if statement is a conditional statement which uses boolean conditions to determine which blocks of verilog code to execute. It is used for priority Logic
+
+#### _Syntax for IF Statement_
+
+```
+if<cond>
+begin
+.....
+.....
+end
+else
+begin
+.....
+.....
+end
+```
+#### _Syntax for IF-ELSE-IF Statement_
+
+```
+if<cond1>
+begin
+.....
+ executes cb1
+.....
+end
+else if<cond2>
+begin
+.....
+  executes cb2
+.....
+end
+else if<cond3>
+begin
+.....
+  executes cb3
+.....
+end
+else
+begin
+.....
+  executes cb4
+.....
+end
+```
+
+#### _Hardware Implementation_
+ 
+![Screen Shot 2021-09-04 at 4 30 46 PM](https://user-images.githubusercontent.com/89927660/132108531-9f88b486-75b8-42be-a141-fc3abac109e4.png)
+ 
+Condition 1 gets the highest Prority, If the condition1 is met - other conditions are not evaluated. LegN gets evaluated only if all the conditions precedding fail to meet.
