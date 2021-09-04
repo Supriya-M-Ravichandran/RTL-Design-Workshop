@@ -1083,7 +1083,7 @@ endmodule
 $ gvim ternary_operator_mux.v
 //PERFORMING SIMULATION
 //Load the design in iVerilog by giving the verilog and testbench file names
-$ iverilog ternary_operator_mux.v tv_ternary_operator_mux.v
+$ iverilog ternary_operator_mux.v tb_ternary_operator_mux.v
 //To dump the VCD file
 $ ./a.out
 //To load the VCD file in GTKwaveform
@@ -1222,17 +1222,15 @@ $ gtkwave tb_ternary_operator_mux.vcd
 ### _Highlights:_
 |#|TOPICS COVERED|
 |:---:|:---:|
-|1.|[GATE LEVEL SIMULATION](#gate-level-simulation)|
-|2.|[SYNTHESIS SIMULATION MISMATCH](#synthesis-simulation-mismatch)|
-|3.|[EXPERIMENTS WITH GLS](#experiments-with-GLS)|
-|4.|[MISSING SENSITIVITY LIST](#missing-sensitivity-list)|
-|5.|[CAVEATS IN BLOCKING ASSIGNMENTS](#caveats-in-blocking-assignments)|
+|1.|[IF STATEMENTS](#if-statements)|
+|2.|[CASE STATEMENTS](#case-statements)|
+|3.|[INCOMPLETE IF STATEMENTS](#incomplete-if-statements)|
 
 ### IF STATEMENTS
 
 #### _Why IF Statements?_
 
-The if statement is a conditional statement which uses boolean conditions to determine which blocks of verilog code to execute. It is used for priority Logic
+The if statement is a conditional statement which uses boolean conditions to determine which blocks of verilog code to execute. If always translates into Multiplexer. It is used for priority Logic and are always used inside always block.The variable should be assigned as a register.
 
 #### _Syntax for IF Statement_
 
@@ -1281,4 +1279,191 @@ end
  
 ![Screen Shot 2021-09-04 at 4 30 46 PM](https://user-images.githubusercontent.com/89927660/132108531-9f88b486-75b8-42be-a141-fc3abac109e4.png)
  
-Condition 1 gets the highest Prority, If the condition1 is met - other conditions are not evaluated. LegN gets evaluated only if all the conditions precedding fail to meet.
+>_**Note:** Condition 1 gets the highest Prority, If the condition1 is met - other conditions are not evaluated. LegN gets evaluated only if all the conditions precedding fail to meet._
+
+#### _Cautions with using IF Statements_
+
+**_Inferred latches_** can serve as a 'warning sign' that the logic design might not be implemented as intended. They represent a bad coding style, which happens because of incomplete if statements/crucial statements missing in the design. For ex: if a else statement is missing in the logic code, the hardware has not been informed on the decision, and hence it will _latch_ and will tried retain the value. This type of design should be completely avoided unless intended to meet the design functionality (ex: Counter Design). 
+
+![Screen Shot 2021-09-04 at 4 45 49 PM](https://user-images.githubusercontent.com/89927660/132108796-8cfdeb80-4f84-4cfe-8b2a-f061fbe139d5.png)
+
+>_**Note:** Combinational circuits cannot have an inferred latch._
+
+### CASE STATEMENTS
+
+#### _CASE Statements_
+The hardware implementation is a Multiplexer. Similar to IF Statements, Case statements are also used inside always block and the variable should be a register variable. 
+
+#### _Syntax_
+
+```
+reg y
+always @ (*)
+begin
+	case(sel)
+		2'b00:begin
+		      ....
+		      end
+		2'b01:begin
+		      ....
+		      end
+		      .
+		      .
+		      .
+	endcase	
+end
+```
+
+#### _Caveats in CASE Statements_
+
+1. Case statements are dangerous when there is an incomplete Case Statement Structure may lead to inferred latches. To avoid inferred latches, code Case with default conditions. When the conditions are not met, the code executes default condition.
+
+```
+reg y
+always @ (*)
+begin
+	case(sel)
+		2'b00:begin
+		      ....
+		      end
+		2'b01:begin
+		      ....
+		      end
+		      .
+		      .
+	default:begin
+         ....
+		       end
+	endcase	
+end
+```
+
+2. Partial Assignments in Case statements - not specifying the values. This will also create inferred latches. To avoid inferred latches, assign all the inputs in all the segments of the case statement. 
+
+#### _Comparison between If - Else If - Else If - Else Vs Case_
+
+|If - Else If - Else If - Else Structure|Case Structure|
+|:---:|:---:|
+|Undergoes concept of priority.|No priority of segments in case structure|
+|Only one segment of the code will execute as it follows top-bottom approach sequentially.|May lead to Unpredictable outputs in bad case structures as there may be more than one segment executing the code. Thus, we should not have overlapping case statements. 
+
+### INCOMPLETE IF STATEMENTS
+
+```
+//Steps Followed: 
+//opening the file
+$ ls *incomp*
+$ gvim *incomp* -o
+//PERFORMING SIMULATION
+//Load the design in iVerilog by giving the verilog and testbench file names
+$ iverilog incomp_if.v tb_incomp_if.v
+//To dump the VCD file
+$ ./a.out
+//To load the VCD file in GTKwaveform
+$ gtkwave tb_incomp_if.vcd
+//PERFORMING SYNTHESIS
+//Invoke Yosys
+$ yosys
+//Read library 
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+//Read Design
+$ read_verilog ternary_operator_mux.v
+//Synthesize Design - this controls which module to synthesize
+$ synth -top ternary_operator_mux
+//Generate Netlist
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+//Realizing Graphical Version of Logic for single modules
+$ show 
+//PERFORMING GLS
+//Opening Verilog Models, Netlist and Test Bench
+$ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/
+sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
+//To dump the VCD file
+$ ./a.out
+//To load the VCD file in GTKwaveform
+$ gtkwave tb_ternary_operator_mux.vcd
+```
+
+#### _CASE 1: incomplete if statements_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 5 17 41 PM](https://user-images.githubusercontent.com/89927660/132109267-6c694036-5f29-4106-9c02-afecf6586919.png)
+
+>_**Expected Behavior:** Else case is missing so there will be a D latch._
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-04 at 5 24 06 PM](https://user-images.githubusercontent.com/89927660/132109365-90c03f00-31d3-4bfb-b67b-10d9de1c30d1.png)
+
+>_**Observation:** When i0 (select line) is low, the output latches to a constant value. Presence of inferred latches due to incomplete if structure._
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 5 31 33 PM](https://user-images.githubusercontent.com/89927660/132109477-1624c61a-a508-4786-b2c0-29c4c90aa375.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 5 32 58 PM](https://user-images.githubusercontent.com/89927660/132109498-1c438b69-15a0-4c35-b43d-1e41d46a44a3.png)
+
+>_**Note:** The synthesized design has a D Latch inferred due to incomplete if structure (missing else statement)._
+
+#### _CASE 2: incomplete if statements_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 5 35 38 PM](https://user-images.githubusercontent.com/89927660/132109551-97fec38b-d1ea-4196-bf3b-b8f0acd7cd84.png)
+
+>_**Expected Behavior:** Else case is missing so there will be a latch._
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-04 at 5 42 15 PM](https://user-images.githubusercontent.com/89927660/132109682-c1230a08-5131-4178-ad34-57abe0c4fa31.png)
+
+>_**Observation:** When i0 is high, the output follows i1. When i0 is low, the output latches to a constant value (when both i0 and i2 are 0). Presence of inferred latches due to incomplete if structure._
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 5 43 16 PM](https://user-images.githubusercontent.com/89927660/132109711-b1387435-c889-457d-971c-9749058b5f16.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 5 43 54 PM](https://user-images.githubusercontent.com/89927660/132109713-86418751-819c-4666-adc9-faae7fa03988.png)
+
+>_**Note:** The synthesized design has a D Latch inferred due to incomplete if structure (missing else statement)._
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
