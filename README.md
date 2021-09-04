@@ -428,9 +428,9 @@ $ synth -top dff_asyncres
 //There will be a separate flop library under a standard library
 //so we need to tell the design where to specifically pick up the DFF
 //But here we point back to the same library and tool looks only for DFF instead of all cells
-$ dfflibmap -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ dfflibmap -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 //Writing the netlist in a crisp manner 
@@ -490,22 +490,275 @@ Note: No hardware requirements - No # of memories, memory bites, processes and c
 >_**Note:** Incase if the input a has 3 bits and generated output has 5 bits. The relationship for the output is always a constant (say 9) times the input a. The number 9 can be split as 8 + 1, which replaces the output equation to be 8 times input a added with 000. _
 
 -----------------------------------------------------------------------------------------------------------------------------------------------
-# Day 2
+# Day 3
 
-Logic Circuits - Overview
+### _Highlights:_
+|#|TOPICS COVERED|
+|:---:|:---:|
+|1.|[LOGIC CIRCUITS OVERVIEW](#logic-circuits-overview)|
+|2.|[COMBINATIONAL LOGIC OPTIMIZATION](#combinational-logic-optimization)|
+|3.|[SEQUENTIAL LOGIC OPTIMIZATION](#sequential-logic-optimization)|
+
+### LOGIC CIRCUITS OVERVIEW
 
 There are two types of digital logic circuits - _combinational and sequential logic circuits_. **_Combinational circuits_** are collection of basic logic gates, where the output depends only on the current inputs and do not require any clocks. They result in a simple circuit capable of implementing complex logic using logic gates only. **_Sequential circuits_** are collection of memory elements calls as flip-flops. The circuit's output depends on current input as well as the past intputs. Due to the presence of flip-flops, the output requires clock inputs. Hence, they result in a complex circuit capable of implmenting complex logic using memory.  
 
-Combinational Logic Optimization Techniques
+#### _Combinational Logic Optimization Techniques_
 
 Logic optimization is a part of logic synthesis to find an equivalent representation of the specified logic circuit under one or more specified constraints. We perform in order to squeeze the logic and get the most optimized design which can lead to area and power savings. This can be achieved through Constant Propoation Method (Ex: Direct Optimisation) or through Boolean Logic Optimization (ex: K-Map or Quine-McCluskey Methods). In Constant Propogation, most optimized logic is obtained by propogating the value of one input is to the next stage and all the way to the output. In Boolean Logic Optimization, synthesis tools reduce complex logic equations to simplied version using boolean algebra/K-map reductions. 
 
-Sequential Logic Optimization Techniques
+#### _Sequential Logic Optimization Techniques_
 
 One of the most basic Optimization Techniques for sequential circuits is the constant propogation method. At times of logic design when D input is tied Low, in order to optimize the sequential logic, the Q pin of flop should always have a constant value. There are also advanced techniques to obtain a most condensed state machine: 1) State Optimization where the unused states are being optimized. 2) Cloning way of logic is done during physical aware synthesis (where if two flops are sitting far off - there might be a large routing delay. To prevent this, a flip flop with huge positive slack can be cloned and the timing can be met). 3) Re-timing - the combinational logic is partitioned effectively to reduce the delay, thereby increasing the frequency of operation. Hence, the performance of the circuit is improved using this technique. 
 
+### COMBINATIONAL LOGIC OPTIMIZATION
 
+```
+//Steps Followed for each of the optimization problems:
+//to view all optimization files
+$ ls *opt_check*
+//Invoke Yosys
+$ yosys
+//Read library 
+$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+//Read Design
+$ read_verilog opt_check.v
+//Synthesize Design - this controls which module to synthesize
+$ synth -top opt_check
+//To perform constant propogation optimization
+$ opt_clean -purge
+//Generate Netlist
+$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+//Realizing Graphical Version of Logic for single modules
+$ show 
+```
 
+![Screen Shot 2021-09-04 at 12 22 02 AM](https://user-images.githubusercontent.com/89927660/132083551-5c53c20d-38a9-4615-87ec-c9c01a249d44.png)
 
+#### _CASE 1: opt_check.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 12 27 04 AM](https://user-images.githubusercontent.com/89927660/132083682-50c7cb6a-9ed9-4fda-b429-70d31a77b7d8.png)
+
+>_**Note:** The value of y depends on a, y = ab._
+
+**_Screenshot: Command for performing combinational optimization using constant propogation method_**
+
+![Screen Shot 2021-09-04 at 12 06 13 AM](https://user-images.githubusercontent.com/89927660/132083253-7852498e-5ecc-48fb-890f-942b46670588.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 12 06 55 AM](https://user-images.githubusercontent.com/89927660/132083272-7384978a-0c82-4303-81c8-efbfbde3dcee.png)
+
+>_**Note:** The optimized graphical realization thus shows a 2-input AND gate being implemented. _
+
+#### _CASE 2: opt_check2.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 12 27 35 AM](https://user-images.githubusercontent.com/89927660/132083672-6d4aa97e-f413-4d74-adae-bdce75cda645.png)
+
+>_**Note:** The value of y depends on a, y = a+b._
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 12 17 39 AM](https://user-images.githubusercontent.com/89927660/132083462-9b0e643c-b1d7-4666-91f2-bc2afe9d1e32.png)
+
+>_**Note:** The optimized graphical realization thus shows 2-input OR gate being implemented. Although OR gate can be realized using NOR, it can lead to having stacked PMOS configuration which is not a design recommendation. So the OR gate is realized using NAND and NOT gates (which has stacked NMOS configuration)._
+
+#### _CASE 3: opt_check3.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 12 28 00 AM](https://user-images.githubusercontent.com/89927660/132083691-bb2eccbb-85b6-4c48-b27d-0c1a3f11dbfa.png)
+
+>_**Note:** The value of y depends on a, y = abc._
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 12 34 27 AM](https://user-images.githubusercontent.com/89927660/132083820-25411f5d-744c-4843-9081-1ae379a98d74.png)
+
+>_**Note:** The optimized graphical realization thus shows 3-input AND gate being implemented._
+
+#### _CASE 4: opt_check4.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 2 03 29 AM](https://user-images.githubusercontent.com/89927660/132085957-fac3ef34-7c99-4108-9908-fd97935cd439.png)
+
+>_**Note:** The value of y depends on a, y = a'c + ac._
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 12 54 49 AM](https://user-images.githubusercontent.com/89927660/132084352-ee9c60ae-747f-4b9d-967d-a002219c20c7.png)
+
+>_**Note:** The optimized graphical realization thus shows A XNOR C gate being implemented._
+
+#### _CASE 5: multiple_module_opt.v_
+
+>_**Note:** Due to the presence of multiple modules, the netlist was flattened before optimizing the logic circuit._
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 2 05 23 AM](https://user-images.githubusercontent.com/89927660/132086005-8d5fecef-68a4-4e3b-b5e6-4ee4bc50af4b.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 1 05 44 AM](https://user-images.githubusercontent.com/89927660/132084707-c7338477-72e5-4d1b-82cb-1ba80040689a.png)
+
+>_**Note:** The optimized graphical realization thus shows a 2-input AND into first input of 2-input OR gate being implemented._
+
+#### _CASE 6: multiple_module_opt2.v_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 1 17 02 AM](https://user-images.githubusercontent.com/89927660/132084984-8cbe4ff2-a4b1-466e-93dc-f2d787a90a58.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 1 18 21 AM](https://user-images.githubusercontent.com/89927660/132084990-4d97dcdd-d3da-45ea-92c5-df26149f7f30.png)
+
+### SEQUENTIAL LOGIC OPTIMIZATION
+
+```
+//Steps Followed for each of the optimization problems:
+//To view all optimization files
+$ ls *df*const*
+//To open multiple files 
+$ dff_const1.v -o dff_const2.v
+//Performing Simulation
+//Load the design in iVerilog by giving the verilog and testbench file names
+$ iverilog dff_const1.v tb_dff_const1.v 
+//To dump the VCD file
+$ ./a.out
+//To load the VCD file in GTKwaveform
+$ gtkwave tb_dff_const1.vcd
+//Performing Synthesis
+//Invoke Yosys 
+$ yosys
+//Read library 
+$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+//Read Design
+$ read_verilog dff_const1.v
+//Synthesize Design - this controls which module to synthesize
+$ synth -top dff_const1
+//There will be a separate flop library under a standard library
+//so we need to tell the design where to specifically pick up the DFF
+//But here we point back to the same library and tool looks only for DFF instead of all cells
+$ dfflibmap -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+//Generate Netlist
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+//Realizing Graphical Version of Logic for single modules
+$ show 
+```
+
+#### _CASE 1: dff_const1.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 1 28 13 AM](https://user-images.githubusercontent.com/89927660/132085199-17e1722e-fbe1-435c-8aed-3261dfe6f7c3.png)
+
+>_**Note:** Although Reset goes low, Q will wait for the clock to go high in order to become high. The flop will be inferred in this design._
+
+**_Screenshot: Verifying the Observation using Simulation_**
+
+![Screen Shot 2021-09-04 at 1 32 08 AM](https://user-images.githubusercontent.com/89927660/132085290-0f5c8c03-5465-4be2-ace6-0d103637a2e9.png)
+
+**_Screenshot: Statistics showing a flop inferred_**
+
+![Screen Shot 2021-09-04 at 2 09 52 AM](https://user-images.githubusercontent.com/89927660/132086143-ac17d20d-dcd1-408c-ade0-04d230be5d83.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 1 58 56 AM](https://user-images.githubusercontent.com/89927660/132085850-78172e3b-bb1f-4e31-8c1c-d48f6361e1c1.png)
+
+>_**Note:** The optimized graphical realization thus shows the flop inferred. Also, the design code has active high reset and the standard cell library has active low reset - so, there is a presence of inverter for the reset._
+
+#### _CASE 2: dff_const2.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 1 28 38 AM](https://user-images.githubusercontent.com/89927660/132085202-cc08a4f3-0787-48f0-abe6-217700b74c31.png)
+
+>_**Note:** Q is constant with value of 1_
+
+**_Screenshot: Verifying the Observation using Simulation_**
+
+![Screen Shot 2021-09-04 at 1 33 58 AM](https://user-images.githubusercontent.com/89927660/132085291-d3c57b95-c2a7-4123-b166-bfa9f76927f7.png)
+
+**_Screenshot: Statistics showing no flop inferred_**
+
+![Screen Shot 2021-09-04 at 2 09 04 AM](https://user-images.githubusercontent.com/89927660/132086147-d64d6779-620d-4b63-ac49-14c8bc40755b.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 2 01 09 AM](https://user-images.githubusercontent.com/89927660/132085890-a2113331-ed15-4ab8-bbbc-9f3cd603897d.png)
+
+>_**Note:** The optimized graphical realization thus does not have any flop inferred and is a constant value of 1, irrespective of reset or clock signals._
+
+#### _CASE 3: dff_const3.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 2 13 14 AM](https://user-images.githubusercontent.com/89927660/132086209-8291c021-eb09-4a30-9d18-654d61264854.png)
+
+>_**Note:** There are 2 flops, reset if condition defines Q else condition defines D signal. Q1 waits for the next positive edge of the clock with reset is applied. The successive flop will sample the value of 0 due to TCK delay effect in the preceeding flop. The output Q will always be high except for a one clock cycle. Both flops are expected to be present and will not be optimized._
+
+**_Screenshot: Verifying the Observation using Simulation_**
+
+![Screen Shot 2021-09-04 at 2 27 30 AM](https://user-images.githubusercontent.com/89927660/132086603-fa6e7356-d968-434a-873a-3c29627174c5.png)
+
+**_Screenshot: Statistics showing both flops being inferred_**
+
+![Screen Shot 2021-09-04 at 2 31 19 AM](https://user-images.githubusercontent.com/89927660/132086794-38e331a5-0f72-4333-8d3b-957e14b2891b.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 2 35 12 AM](https://user-images.githubusercontent.com/89927660/132086882-0eb8b850-4eb6-418b-8465-f5736574e96f.png)
+
+>_**Note:** The optimized graphical realization thus shows both flops being inferred. It can also be seen that the first flop is reset and second is set._
+
+#### _CASE 4: dff_const4.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 2 37 38 AM](https://user-images.githubusercontent.com/89927660/132086984-b74bf459-eb0f-46c1-bc78-e2ea06011d84.png)
+
+>_**Note:** Since both the flops have constant 1 in the output lines and thus they are expected to be optimized. The resulting netlist will not have any flops inferred. ._
+
+**_Screenshot: Verifying the Observation using Simulation_**
+
+![Screen Shot 2021-09-04 at 2 41 30 AM](https://user-images.githubusercontent.com/89927660/132087140-bce6b4d5-b9ba-429f-a5e2-d0c2d4379fe3.png)
+
+**_Screenshot: Statistics showing no flops being inferred_**
+
+![Screen Shot 2021-09-04 at 2 46 50 AM](https://user-images.githubusercontent.com/89927660/132087252-261a2389-5fce-4e02-9611-e1bf33afc620.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 2 48 40 AM](https://user-images.githubusercontent.com/89927660/132087304-464689aa-e783-4f71-88ee-8a9c338bf17d.png)
+
+>_**Note:** The optimized graphical realization thus does not have flops inferred and is a constant value of 1, irrespective of reset or clock signals._
+
+#### _CASE 5: dff_const5.v_
+
+**_Screenshot: Expected logic from verilog file_**
+
+![Screen Shot 2021-09-04 at 2 38 08 AM](https://user-images.githubusercontent.com/89927660/132086988-b12a43cb-0612-42ef-8044-a0276b8add69.png)
+
+**_Screenshot: Verifying the Observation using Simulation_**
+
+![Screen Shot 2021-09-04 at 2 44 22 AM](https://user-images.githubusercontent.com/89927660/132087147-6e2d3c90-3ffc-4e4e-9663-51d84b990a43.png)
+
+**_Screenshot: Statistics showing both same flop being inferred twice_**
+
+![Screen Shot 2021-09-04 at 2 54 43 AM](https://user-images.githubusercontent.com/89927660/132087411-95bbba8b-593c-4b85-a81d-680cfcded3e3.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 2 55 39 AM](https://user-images.githubusercontent.com/89927660/132087414-fe214115-81c5-42c5-a030-7031f94bc678.png)
+
+>_**Note:** The optimized graphical realization have the same flop inferred twice._
 
 
