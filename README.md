@@ -74,6 +74,11 @@ $ git clone https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
 
 ### MULTIPLEXER REVIEW
 
+![Screen Shot 2021-09-04 at 4 50 00 AM](https://user-images.githubusercontent.com/89927660/132090267-473a8ae1-ec52-4979-9e60-5cc0b05a0e6e.png)
+
+#### _What is a Mux?_
+The multiplexer (MUX) is a combinational logic circuit which is designed to switch one of the several input lines through to a single common output. The input A acts to control which input (either I0 or I1) gets passed to the output Q. A good mux when the data select input A is at logic 0, input I1 passes its data to the output, while I0 is blocked. When the input is at logic 1, input I0 passes its data to the output, while I1 is blocked. Output Expression is given as Q = A'I1 + A I0.
+
 ### GOOD MUX IMPLEMENTATION USING IVERILOG
 
 ```
@@ -185,7 +190,7 @@ $ write_verilog -noattr good_mux_netlist.v
 |6.|[FLIP FLOP OVERVIEW](#flip-flop-overview)|
 |7.|[FLIP FLOP SIMULATION](#flip-flop-simulation)|
 |8.|[FLIP FLOP SYNTHESIS](#flip-flop-synthesis)|
-
+|9.|[OPTIMIZATION TECHNIQUES](#optimization-techniques)|
 
 ### UNDERSTANDING THE LIBRARY
 
@@ -295,7 +300,7 @@ $ !gvim multiple_modules_hier.v
 
 **_Screenshot: Netlist file showing the sub-modules, preserving the hierarchy**
 
-![Screen Shot 2021-09-02 at 5 27 46 PM](https://user-images.githubusercontent.com/89927660/131924297-ff9aed84-85ba-40dd-884f-7c49705b0e48.png)
+![Screen Shot 2021-09-04 at 4 32 57 AM](https://user-images.githubusercontent.com/89927660/132089951-73857fd9-aba8-40ac-b477-b316c8df5dc4.png)
 
 >_**Observation:** There is an interesting note on how the OR gate is realized through De-Morgan's Law. The Synthesis tool has chosen NAND implementation. This is because, for a NAND gate in CMOS implementaion - there is a stacked NMOS structure. For realising OR gate - there is a stacked PMOS structure. Stacking PMOS will have negative effects (since they need good logical efforts due to poor mobility of holes). Hence there is a need for wide cell to put in the logical efforts._
 
@@ -450,7 +455,7 @@ $ !gvim dff_asyncres_ff.v
 
 ![Screen Shot 2021-09-02 at 11 28 27 PM](https://user-images.githubusercontent.com/89927660/131950646-83b1784a-8cbf-4be2-96ca-1d812fe00391.png)
 
-### OPTIMIZATION TECHNIQUES PART 1
+### OPTIMIZATION TECHNIQUES
 
 ```
 //Steps Followed:
@@ -463,31 +468,69 @@ $ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog mult_2.v
 //Synthesize Design - this controls which module to synthesize
-$ synth -top mult2
+$ synth -top mul2
 //Generate Netlist
 $ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 //Writing the netlist in a crisp manner 
-$ write_verilog -noattr dff_asyncres_ff.v
-$ !gvim dff_asyncres_ff.v
+$ write_verilog -noattr mult_2.v
+$ !gvim mult_2.v
 ```
+
+#### _CASE 1: mult_2.v_
+
+**_Screenshot: Expected logic from RTL file_**
+
+![Screen Shot 2021-09-04 at 3 55 55 AM](https://user-images.githubusercontent.com/89927660/132088944-b199fd81-2a54-4184-8273-3ed808c052cd.png)
 
 >_**Note:** Mul2: It has a 3 bit input and generating a 4 bit output. The relationship for the output is twice the input a. Apparently, the output can be written as the input a itself appended with zeros. Ideally, there is no requirement for Hardware without needing a multiplier._
 
 **_Screenshot: Statistics of D FLipflop with Asynchronous Reset_**
 
-Note: No hardware requirements - No # of memories, memory bites, processes and cells. Number of cells inferred is 0.
+![Screen Shot 2021-09-04 at 4 04 02 AM](https://user-images.githubusercontent.com/89927660/132089094-37a9160e-2860-43f0-a36e-44a5cd2128d6.png)
+
+>_**Note:** No hardware requirements - No # of memories, memory bites, processes and cells. Number of cells inferred is 0._
 
 **_Screenshot: abc command return due to absence of standard cell library**
+
+![Screen Shot 2021-09-04 at 4 05 32 AM](https://user-images.githubusercontent.com/89927660/132089134-4dac96e9-7e26-4f54-827a-871e5a71cd28.png)
 
 >_**Observation:** Due to absence of the cell, the tool returns Not to call abc command as there is nothing to map._
 
 **_Screenshot: Graphical Realization of the Logic_**
 
-### OPTIMIZATION TECHNIQUES PART 2
+![Screen Shot 2021-09-04 at 4 06 16 AM](https://user-images.githubusercontent.com/89927660/132089155-291995bd-2b6d-4bd5-9b17-0a377d4c011a.png)
 
->_**Note:** Incase if the input a has 3 bits and generated output has 5 bits. The relationship for the output is always a constant (say 9) times the input a. The number 9 can be split as 8 + 1, which replaces the output equation to be 8 times input a added with 000. _
+>_**Note:** The ouput here is just a appended with a zero._
+
+**_Screenshot: NetList File of Sub-module_**
+
+![Screen Shot 2021-09-04 at 4 27 15 AM](https://user-images.githubusercontent.com/89927660/132089753-8e6cd95d-0d92-4b70-86f0-bea362fc5c73.png)
+
+#### _CASE 2: mult_8.v_
+
+**_Screenshot: Expected logic from RTL file_**
+
+![Screen Shot 2021-09-04 at 4 29 20 AM](https://user-images.githubusercontent.com/89927660/132089797-01b21135-e1b0-44e0-96fc-13151650882a.png)
+
+>_**Note:** Incase if the input a has 3 bits and generated output has 5 bits. The relationship for the output y is always a constant (say 9) times the input a. The number 9a can be split as (8 + 1)a. a(1) - a mapped to a 3-bit number. a(8) - a followed by 000 which gives a 6-bit number._
+
+![Screen Shot 2021-09-04 at 4 19 20 AM](https://user-images.githubusercontent.com/89927660/132089537-ea9225f5-00ed-462f-b61e-208a3ae8d25e.png)
+
+**_Screenshot: Statistics_**
+
+![Screen Shot 2021-09-04 at 4 09 34 AM](https://user-images.githubusercontent.com/89927660/132089581-678a6ffc-7a0c-4622-b463-977f9696c3da.png)
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 4 21 45 AM](https://user-images.githubusercontent.com/89927660/132089629-c1380335-d442-4db1-86fa-3288b69615fd.png)
+
+>_**Note:** There is no hardware requirement._
+
+**_Screenshot: NetList File of Sub-module_**
+
+![Screen Shot 2021-09-04 at 4 25 24 AM](https://user-images.githubusercontent.com/89927660/132089762-47842545-dc80-49f9-bbea-23719af81335.png)
 
 -----------------------------------------------------------------------------------------------------------------------------------------------
 # Day 3
@@ -668,7 +711,7 @@ $ show
 
 **_Screenshot: Statistics showing a flop inferred_**
 
-![Screen Shot 2021-09-04 at 2 09 52 AM](https://user-images.githubusercontent.com/89927660/132086143-ac17d20d-dcd1-408c-ade0-04d230be5d83.png)
+![Screen Shot 2021-09-04 at 4 31 22 AM](https://user-images.githubusercontent.com/89927660/132089896-f5ff572c-e4b2-4266-988e-79997dc01e99.png)
 
 **_Screenshot: Graphical Realization of the Logic_**
 
@@ -724,7 +767,7 @@ $ show
 
 **_Screenshot: Expected logic from verilog file_**
 
-![Screen Shot 2021-09-04 at 2 37 38 AM](https://user-images.githubusercontent.com/89927660/132086984-b74bf459-eb0f-46c1-bc78-e2ea06011d84.png)
+![Screen Shot 2021-09-04 at 4 31 00 AM](https://user-images.githubusercontent.com/89927660/132089903-94c9504f-7e6d-4b10-8989-05310fa72791.png)
 
 >_**Note:** Since both the flops have constant 1 in the output lines and thus they are expected to be optimized. The resulting netlist will not have any flops inferred. ._
 
@@ -746,7 +789,7 @@ $ show
 
 **_Screenshot: Expected logic from verilog file_**
 
-![Screen Shot 2021-09-04 at 2 38 08 AM](https://user-images.githubusercontent.com/89927660/132086988-b12a43cb-0612-42ef-8044-a0276b8add69.png)
+![Screen Shot 2021-09-04 at 4 31 51 AM](https://user-images.githubusercontent.com/89927660/132089891-9ccbcce4-9e88-4e8c-83b2-62e96dedeea1.png)
 
 **_Screenshot: Verifying the Observation using Simulation_**
 
@@ -796,7 +839,7 @@ $ show
 
 **_Screenshot: Statistics showing only one flop inferred instead of 3 flops sinces it is a 3 bit counter_**
 
-![Screen Shot 2021-09-04 at 3 17 48 AM](https://user-images.githubusercontent.com/89927660/132087992-ae0ac308-e08c-43ee-bde0-2f6930afcaa3.png)
+![Screen Shot 2021-09-04 at 4 32 14 AM](https://user-images.githubusercontent.com/89927660/132089882-32ddc9a5-fe19-4bae-a8de-1dd342f53450.png)
 
 **_Screenshot: Graphical Realization of the Logic_**
 
