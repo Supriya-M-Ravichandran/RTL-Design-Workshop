@@ -141,13 +141,13 @@ Fast and Slow cells comes with its own advantages and disadvantages when we cons
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog good_mux.v
 //Synthesize Design
 $ synth -top good_mux
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic
 $ show
 //Writing the netlist in a crisp manner 
@@ -266,13 +266,13 @@ $ gvim multiple_modules.v
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog multiple_modules.v
 //Synthesize Design
 $ synth -top multiple_modules
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for multiple modules
 $ show multiple_modules
 //Writing the netlist in a crisp manner 
@@ -335,13 +335,13 @@ Sub-module level synthesis is preferred when there are multiple instances of sam
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog multiple_modules.v
 //Synthesize Design - this controls which module to synthesize
 $ synth -top sub_module1
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 //Writing the netlist in a crisp manner 
@@ -416,7 +416,7 @@ $ gtkwave tb_dff_asyncres.vcd
 
 ![Screen Shot 2021-09-02 at 11 00 02 PM](https://user-images.githubusercontent.com/89927660/131948704-e40344b8-ec25-4f30-9191-cd183067d287.png)
 
->_**Observation:** The output doesnt wait for the clock (independent of positive edge of the clock)._
+>_**Observation:** The output does not wait for the clock (independent of positive edge of the clock)._
 
 ### FLIP FLOP SYNTHESIS
 
@@ -425,7 +425,7 @@ $ gtkwave tb_dff_asyncres.vcd
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog dff_asyncres.v
 //Synthesize Design - this controls which module to synthesize
@@ -464,13 +464,13 @@ $ gvim mult_*.v -o
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog mult_2.v
 //Synthesize Design - this controls which module to synthesize
 $ synth -top mul2
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 //Writing the netlist in a crisp manner 
@@ -564,7 +564,7 @@ $ ls *opt_check*
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog opt_check.v
 //Synthesize Design - this controls which module to synthesize
@@ -572,7 +572,7 @@ $ synth -top opt_check
 //To perform constant propogation optimization
 $ opt_clean -purge
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 ```
@@ -682,7 +682,7 @@ $ gtkwave tb_dff_const1.vcd
 //Invoke Yosys 
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog dff_const1.v
 //Synthesize Design - this controls which module to synthesize
@@ -814,7 +814,7 @@ $ gvim counter_opt.v
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Read Design
 $ read_verilog opt_check.v
 //Synthesize Design - this controls which module to synthesize
@@ -822,7 +822,7 @@ $ synth -top opt_check
 //To perform constant propogation optimization
 $ opt_clean -purge
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/SKY130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 ```
@@ -857,6 +857,7 @@ $ gvim counter_opt2.v
 //Changes made in the verilog code, i for insert mode: 
 - assign q = [count2:0] == 3'b100;
 ```
+
 **_Screenshot: Expected logic from verilog file_**
 
 ![Screen Shot 2021-09-04 at 3 36 58 AM](https://user-images.githubusercontent.com/89927660/132088508-f79a00ad-cd2c-451b-9521-ded1a1568e41.png)
@@ -873,9 +874,340 @@ $ gvim counter_opt2.v
 
 >_**Note:** All three flops can be seen. There is a need for incremental logic, so the logic other than flops represent the adder circuit. The expression at the output is q = counter2.counter1'.counter0'. Therefore, the outputs having no direct role on the primary output will only be optimized away._
 
+-----------------------------------------------------------------------------------------------------------------------------------------------
+# Day 4
 
+### _Highlights:_
+|#|TOPICS COVERED|
+|:---:|:---:|
+|1.|[GATE LEVEL SIMULATION](#gate-level-simulation)|
+|2.|[SYNTHESIS SIMULATION MISMATCH](#synthesis-simulation-mismatch)|
+|3.|[EXPERIMENTS WITH GLS](#experiments-with-GLS)|
 
+### GATE LEVEL SIMULATION
 
+#### _What is GLS?_
+
+Previously, the functionality of the design was given stimulus inputs and the output was verified to meet the specifications through a test bench module. The RTL design was considered as the DUT (Design Under Test). In Gate Level Simulation, the Netlist is considered as the Design Under Test.  Netlist is logically same as the RTL code that was converted to Standard Cell Gates. Hence, same test bench will align with the design. 
+
+#### _Advantages of GLS:_
+
+* To logically verify the correctness of the design after Synthesis.
+* During the RTL Simulation, timing was not accounted. But for practical applications, there is a need to ensure the timing of the design to be met. 
+
+![Screen Shot 2021-09-04 at 12 54 53 PM](https://user-images.githubusercontent.com/89927660/132105880-e47f3d07-d920-4d0a-ab03-1b3c7b3da68d.png)
+
+```
+//consider a netlist
+and uand (.a(a),.b(b))
+or uor (.a(a),.b(b))
+//There is a need to define the meaning of and and or
+//Thus we need netlist, testbench and verilog models of the standard cells
+```
+
+>_**Note:** Netlist consists of all standard cells instantiated and it's meaning is conveyed to the iVerilog using Gate Level Verilog Models. Gate Level Verilog Models can be functional or timing aware. If the gate level models are delay annotated, then GLS can be performed for timing validation also in addition to functional validation._
+
+### SYNTHESIS SIMULATION MISMATCH
+
+If netlist is a true reciprocation of RTL, what is the need to validate the functionality of netlist? There may be synthesis and simulation mismatch due to the following reasons: 
+1. Absence of Sensitivity List
+2. Blocking Vs Non Blocking Assignments
+3. Non Standard Verilog Coding
+
+#### _Absence of Sensitivity List:_
+
+```
+module mux(
+input i0,input i1
+input sel,
+output reg y
+);
+always @ (sel)
+begin
+   if (sel)
+            y = i1;
+   else 
+            y = i0;          
+end
+endmodule
+```
+
+The output of Simulator changes only when the input changes. The output is not evaluated when there is no activity. In the above 2x1 mux code, when select is changing (when select is 1), the output is 1 when input is 1 else the output is 0. The always block evaluates only when there is a transition change in select pin, and is not sensitive (output does not reflect) to changes in the inputs 0 and 1. 
+
+|Time|Logic|
+|:---:|:---:|
+|During Simulation|Logic acts as a Latch/Double edged Flop|
+|During Synthesis|Logic acts as a Mux|
+
+**_Hence there is a Synthesis Simulation mismatch due to missing sensitivity list. This is because the synthesizer will not take sensitivity list into account and always looks for the functionality of the code._**
+
+#### _Corrected code for missing sensitivity list:_
+
+```
+module mux(
+input i0,input i1
+input sel,
+output reg y
+);
+always @ (*)
+begin
+   if (sel)
+            y = i1;
+   else 
+            y = i0;        
+end
+endmodule
+```
+
+>_**Note:** Thus the mismatch is corrected by having always @ (*) where the always block is evaluated when any signal changes. So, any changes in inputs will also be seen in the output._
+
+#### _Blocking Vs Non Blocking Statments in Verilog:_
+
+#### _CAVEAT 1:_
+
+The error always occurs when inside an always block. **_Blocking Statements_** executes the statements in the order it is written. The first statement is always evaluated before second statement (like a C program). **_Non-Blocking Statements_** executes the statements in parallel. All the right hand side assignments will be evaluated before assigning to the left hand side. 
+
+|Assignment|Statement|
+|:---:|:---:|
+|=|Blocking Statment|
+|<=|Non-Blocking Statment|
+
+```
+module code (input clk,input reset,
+input d,
+output reg q);
+always @ (posedge clk,posedge reset)
+begin
+if(reset)
+begin
+        q0 = 1'b0;
+        q = 1'b0;
+end
+else
+        q = q0;
+        q0 = d;    
+end
+endmodule
+```
+
+![Screen Shot 2021-09-04 at 2 46 14 PM](https://user-images.githubusercontent.com/89927660/132106366-2faa1e5a-738b-4782-a550-4fe8dfc4aef2.png)
+
+The code is aimed to create a shift register when two flops as shown above. The assignments inside the code represent the blocking statements. q0 and q are assigned to 1 bit 0s - so asynchronous reset connection happens. However, in the later parts, q0 is assigned to q and then d gets assigned to q0. If suppose, there is a change in the code
+
+```
+module code (input clk,input reset,
+input d,
+output reg q);
+always @ (posedge clk,posedge reset)
+begin
+if(reset)
+begin
+        q0 = 1'b0;
+        q = 1'b0;
+end
+else
+        q0 = d;
+        q = q0;    
+end
+endmodule
+```
+
+In this case, d is assigned to q0 and then q0 is assigned to q. So, by the time the second statment gets executed, q0 has the value of d. This will lead to implementation of only one flop. Previously, q has the value of q0 and q0 has the value of d - which lead to implementation of 2 storage elements. 
+
+#### _Usage of non-blocking statements:_
+
+```
+module code (input clk,input reset,
+input d,
+output reg q);
+always @ (posedge clk,posedge reset)
+begin
+if(reset)
+begin
+        q0 <= 1'b0;
+        q <= 1'b0;
+end
+else
+        q0 <= d;
+        q <= q0;   
+end
+endmodule
+```
+
+**_Therefore the order does not matter here as RHS gets evaluated first and then assignment takes place. Presence of two flops irrespective of the order. Always use non blocking statements for writing sequential circuits._**
+
+#### _CAVEAT 2: Causing Synthesis Simulation Mismatch_
+
+```
+module code (input a,b,c
+output reg y);
+reg q0;
+always @ (*)
+begin
+        y = q0 & c;
+        q0 = a|b ;    
+end 
+endmodule
+```
+
+The code is aimed to create a function of y = (A+B).C. In the above code, when the code enters always block, due to the presence of blocking statements, they get evaulated in order. So y gets evaluated first (q0.C), where the q0 results corresponds to the previous iteration's result. The q0 value gets updated only in the second statement. 
+
+|Time|Logic|
+|:---:|:---:|
+|During Simulation|Logic mimcs a delay or flop|
+|During Synthesis|Logic will not have a flop|
+
+When the order of the statements is changed: In this case, a OR b is evaluated first and the latest value is used for calculating y. 
+
+```
+module code (input a,b,c
+output reg y);
+reg q0;
+always @ (*)
+begin
+        q0 = a|b ;
+        y = q0 & c;
+end 
+endmodule
+```
+
+**_Therefore there is a paramount importance to run the GLS on the netlist and match the specifications, to ensure there is no simulation synthesis mismatch._**
+
+### EXPERIMENTS WITH GLS
+
+```
+//Steps Followed: 
+//opening the file
+$ gvim ternary_operator_mux.v
+//PERFORMING SIMULATION
+//Load the design in iVerilog by giving the verilog and testbench file names
+$ iverilog ternary_operator_mux.v tv_ternary_operator_mux.v
+//To dump the VCD file
+$ ./a.out
+//To load the VCD file in GTKwaveform
+$ gtkwave tb_ternary_operator_mux.vcd
+//PERFORMING SYNTHESIS
+//Invoke Yosys
+$ yosys
+//Read library 
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+//Read Design
+$ read_verilog ternary_operator_mux.v
+//Synthesize Design - this controls which module to synthesize
+$ synth -top ternary_operator_mux
+//Generate Netlist
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+//Realizing Graphical Version of Logic for single modules
+$ show 
+//PERFORMING GLS
+//Opening Verilog Models, Netlist and Test Bench
+$ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/
+sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
+//To dump the VCD file
+$ ./a.out
+//To load the VCD file in GTKwaveform
+$ gtkwave tb_ternary_operator_mux.vcd
+```
+
+#### _CASE 1: ternary_operator.v_
+
+>_**Note:** Mux function is written using a ternary operator. Ternary operator takes 3 operands with the format. 
+
+```
+<Condition>?<True>:<False>
+```
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 2 22 39 PM](https://user-images.githubusercontent.com/89927660/132105872-aacbb89e-5a9d-42b9-8868-fe46a5a0ddc5.png)
+
+**_Screenshot: Verifying the Observation using Simulation_**
+
+![Screen Shot 2021-09-04 at 2 23 25 PM](https://user-images.githubusercontent.com/89927660/132105866-0c6427fb-b651-4c4f-8c42-19966ddaf0b2.png)
+
+>_**Observation:** Function of a 2x1 mux._
+
+**_Screenshot: Statistics showing a flop inferred_**
+
+![Screen Shot 2021-09-04 at 2 24 38 PM](https://user-images.githubusercontent.com/89927660/132105861-045b6e33-2997-4a9c-9540-0ac327628366.png)
+
+>_**Observation:** A mux has been inferred._
+
+**_Screenshot: Graphical Realization of the Logic_**
+
+![Screen Shot 2021-09-04 at 2 25 19 PM](https://user-images.githubusercontent.com/89927660/132105855-909fbf9b-7abb-4756-8f7a-b9569797f75f.png)
+
+>_**Note:** NAND gate with i1 and sel, inverted io and Or to And invert gate, to which the inputs are sel and inverted i0. The output y is given by the expression = sel'.i0 + sel.i1_
+
+**_Screenshot: Commands to perform Gate Level Simulation_**
+
+![Screen Shot 2021-09-04 at 2 51 13 PM](https://user-images.githubusercontent.com/89927660/132106425-f87711d7-acfd-4292-b5b5-cb488aa86dd7.png)
+
+**_Screenshot: GLS Output_**
+
+![Screen Shot 2021-09-04 at 2 44 12 PM](https://user-images.githubusercontent.com/89927660/132106301-9ef0cd42-25b6-42f2-a4fa-656725632265.png)
+
+>_**Observation:** Confirms the functionality of 2x1 mux._
+
+#### _CASE 2: bad_mux.v showing mismatch due to missing sensitivity list_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 2 52 14 PM](https://user-images.githubusercontent.com/89927660/132106441-722fcb2e-fb52-4bfa-b761-bf5b9de3817c.png)
+
+>_**Expected Behavior:** The sensitivity list contains only select input. So during Simulation, the logic acts as a latch and during synthesis, it acts as a mux._
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-04 at 2 58 38 PM](https://user-images.githubusercontent.com/89927660/132106569-047919a9-4eb7-44db-9615-f591e909ad9f.png)
+
+>_**Observation:** When select is low, it follows i0, and there is no activity happening in select line - so the output remains low. When the select is high, it follows i1, and again there is no activiting in the select line. Thus it acts as a flop, retaining its value._
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 3 04 07 PM](https://user-images.githubusercontent.com/89927660/132106716-e0b15b92-337f-4e09-a534-c920a676ec16.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 3 06 07 PM](https://user-images.githubusercontent.com/89927660/132106767-401bf904-f8b4-46d1-a0fd-28124d5523a5.png)
+
+>_**Note:** There is a mux inferred during synthesis of the logic._
+
+**_Screenshot: GLS Output_**
+
+![Screen Shot 2021-09-04 at 3 12 13 PM](https://user-images.githubusercontent.com/89927660/132106949-edceae4c-0222-481f-9f09-04b04a36ed11.png)
+
+>_**Observation:** Confirms the functionality of 2x1 mux after synthesis where when the select is low, activity of input 0 is reflected on y. Similarly, when the select is hight, activity of input 1 is reflected on y. Hence there is a synthesis simulation mismatch due to missing sensitivity list._
+
+#### _CASE 3: blocking_caveat.v showing mismatch due to blocking assignments_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 3 18 30 PM](https://user-images.githubusercontent.com/89927660/132107088-418508ce-be19-4e72-9111-19c59d10c87c.png)
+
+>_**Expected Behavior:** In the above code, when the code enters always block, due to the presence of blocking statements, they get evaulated in order. So d gets evaluated first (x.c), where the x results corresponds to the previous iteration's result (a|b). The d value gets updated only in the second statement. The output expression is given as d = (a+b).c_
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-04 at 3 24 43 PM](https://user-images.githubusercontent.com/89927660/132107190-01276363-6441-4828-964f-8a90c1fe92d4.png)
+
+>_**Observation:** d = (a+b).c, if the inputs a,b = 0; then a+b = 0. The output d = 0. But, we observe the output d = 1 because it looks at the past value where a+b was 1._
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 3 27 07 PM](https://user-images.githubusercontent.com/89927660/132107231-35d383aa-8af6-4926-b050-483e3c96a552.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 3 27 52 PM](https://user-images.githubusercontent.com/89927660/132107244-2db5d6bd-ebd7-4873-a289-74b16fd0e19e.png)
+
+>_**Note:** The synthesized design has or 2 and gate to realize the output._
+
+**_Screenshot: GLS Output_**
+
+![Screen Shot 2021-09-04 at 3 31 35 PM](https://user-images.githubusercontent.com/89927660/132107321-51c03706-4818-4d15-a9a8-b0eb623d14b5.png)
+
+>_**Observation:** The value of output d is 0 after simulation and 1 after synthesis for the same set of input values. Hence there is a synthesis simulation mismatch due to blocking assignments._
 
 
 
