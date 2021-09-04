@@ -76,7 +76,7 @@ $ git clone https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
 
 ![Screen Shot 2021-09-04 at 4 50 00 AM](https://user-images.githubusercontent.com/89927660/132090267-473a8ae1-ec52-4979-9e60-5cc0b05a0e6e.png)
 
-#### _What is a Mux?_
+#### _Mux - Working:_
 The multiplexer (MUX) is a combinational logic circuit which is designed to switch one of the several input lines through to a single common output. The input A acts to control which input (either I0 or I1) gets passed to the output Q. A good mux when the data select input A is at logic 0, input I1 passes its data to the output, while I0 is blocked. When the input is at logic 1, input I0 passes its data to the output, while I1 is blocked. Output Expression is given as Q = A'I1 + A I0.
 
 ### GOOD MUX IMPLEMENTATION USING IVERILOG
