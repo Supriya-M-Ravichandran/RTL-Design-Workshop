@@ -184,7 +184,7 @@ $ write_verilog -noattr good_mux_netlist.v
 |5.|[SUB MODULE LEVEL SYNTHESIS](#sub-module-level-synthesis)|
 |6.|[FLIP FLOP OVERVIEW](#flip-flop-overview)|
 |7.|[FLIP FLOP SIMULATION](#flip-flop-simulation)|
-|7.|[FLIP FLOP SYNTHESIS](#flip-flop-synthesis)|
+|8.|[FLIP FLOP SYNTHESIS](#flip-flop-synthesis)|
 
 
 ### UNDERSTANDING THE LIBRARY
@@ -485,9 +485,18 @@ Note: No hardware requirements - No # of memories, memory bites, processes and c
 
 **_Screenshot: Graphical Realization of the Logic_**
 
-### OPTIMIZATION TECHNIQUES PART 2
+### OPTIMISATION TECHNIQUES PART 2
 
 >_**Note:** Incase if the input a has 3 bits and generated output has 5 bits. The relationship for the output is always a constant (say 9) times the input a. The number 9 can be split as 8 + 1, which replaces the output equation to be 8 times input a added with 000. _
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+# Day 2
+
+Logic Optimisation
+There are two types of digital logic circuits - combinational and sequential logic circuits. Combinational circuits are collection of basic logic gates, where the output depends only on the current inputs and do not require any clocks. They result in a simple circuit capable of implementing complex logic using logic gates only. Sequential circuits are collection of memory elements calls as flip-flops. The circuit's output depends on current input as well as the past intputs. Due to the presence of flip-flops, the output requires clock inputs. Hence, they result in a complex circuit capable of implmenting complex logic using memory.  
+
+Why combi logic optimisation? 
+
 
 
 
