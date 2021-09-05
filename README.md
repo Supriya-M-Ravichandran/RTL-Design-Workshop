@@ -1101,6 +1101,8 @@ $ synth -top ternary_operator_mux
 $ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
+//Write Verilog netlist
+$ write_verilog ternary_operator_mux_net.v
 //PERFORMING GLS
 //Opening Verilog Models, Netlist and Test Bench
 $ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/
@@ -1217,7 +1219,7 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
-# Day 4
+# Day 5
 
 ### _Highlights:_
 |#|TOPICS COVERED|
@@ -1432,11 +1434,110 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 >_**Note:** The synthesized design has a D Latch inferred due to incomplete if structure (missing else statement)._
 
+### PARTIAL CASE STATEMENTS
 
+#### _CASE 1: incomplete case statements_
 
+**_Screenshot: Verilog file_**
 
+![Screen Shot 2021-09-04 at 9 37 44 PM](https://user-images.githubusercontent.com/89927660/132113320-a73dbbda-58c7-4bb5-acbd-19a45f600226.png)
 
+>_**Expected Behavior:** There is an incomplete case structure, so a latch is expected._
 
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-04 at 9 46 23 PM](https://user-images.githubusercontent.com/89927660/132113329-74d9023b-9b40-4622-a6c2-e63931d4a496.png)
+
+>_**Observation:** When select signal is 00, the output follows i0 and is i1 when the select value is 01. Since the output is undefined for 10 and 11 values, the ouput latches to the previously available value._
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 9 54 29 PM](https://user-images.githubusercontent.com/89927660/132113365-45d871b2-bf70-41c9-814f-52a639dcde66.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 9 55 08 PM](https://user-images.githubusercontent.com/89927660/132113368-c8dde325-4b17-4b72-b5a5-c00691944690.png)
+
+>_**Note:** The synthesized design has a D Latch inferred due to incomplete case structure (missing output definition for 2 of the select statements)._
+
+#### _CASE 2: incomplete case statements with default_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 10 01 40 PM](https://user-images.githubusercontent.com/89927660/132113527-ffd675e0-90f5-4c68-a83e-346dd7d899ac.png)
+
+>_**Expected Behavior:** There is an incomplete case structure but with a default condition, so a latch is not expected._
+
+**_Screenshot: Simulation Output_**
+![Screen Shot 2021-09-04 at 10 03 58 PM](https://user-images.githubusercontent.com/89927660/132113528-0860166f-359a-4e84-8eb9-cf88887349e0.png)
+
+>_**Observation:** When select signal is 00, the output follows i0 and is i1 when the select value is 01. Since the output is undefined for 10 and 11 values, the presence of default sets the output to i2 when the select line is 10 or 11. The ouput will not latch and be a proper combinational circuit. 
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 10 04 47 PM](https://user-images.githubusercontent.com/89927660/132113530-1c111485-4604-45a5-a2e0-db2164e71d40.png)
+
+**_Screenshot: Synthesis Output_**
+![Screen Shot 2021-09-04 at 10 05 16 PM](https://user-images.githubusercontent.com/89927660/132113531-aa0c5fec-8590-46e0-8add-d5fe444e4190.png)
+
+>_**Note:** The synthesized design has combinational logic without latch due to the presence of default case statement._
+
+#### _CASE 3: partial case statement_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-04 at 10 17 14 PM](https://user-images.githubusercontent.com/89927660/132113918-f56c0602-67be-4385-90af-19f2a42208b8.png)
+
+>_**Expected Behavior:** There is a partial case structure with output of x undefined for one of the select values, so a latch is not expected._
+
+>_**Observation:** The mux for output y will not have a latch, while there will be a latch for mux with output x as one of the conditions is not defined_
+
+|Select|Output y|Output x|
+|:---:|:---:|:---:|
+|00|i0|i2|
+|01|i1|Latch|
+|10|i2|i1|
+|11|i2|i1|
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 10 26 18 PM](https://user-images.githubusercontent.com/89927660/132113992-7d21193c-0c3a-498c-91dd-ef6008e399ef.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 10 26 47 PM](https://user-images.githubusercontent.com/89927660/132113995-a1ab773b-d335-40e6-9fb2-e838195eb24a.png)
+
+>_**Note:** The synthesized design has a latch due to partial case statement for output x. Though we write default condition, there can be inferred latches._
+
+#### _CASE 4: overlapping case statement_
+
+**_Screenshot: Verilog file_**
+
+[Screen Shot 2021-09-04 at 11 12 34 PM](https://user-images.githubusercontent.com/89927660/132115407-c4412126-8e23-4247-b022-c53b7692285a.png)
+
+>_**Expected Behavior:** Although the case structure is complete, there is overlapping of output when the select input is 10 or 11 and ? represented that the bit can be wither 0 or 1. Thus, the simulator may be confused._
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-04 at 11 34 45 PM](https://user-images.githubusercontent.com/89927660/132115404-89e9d456-7539-472a-b997-68d0ba580ed1.png)!
+
+>_**Observation:** Here, when the select input is 11, the output value is latched to a value._
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-04 at 11 25 49 PM](https://user-images.githubusercontent.com/89927660/132115256-ef57bde4-aeb4-4972-a386-1192cf52b3c4.png)
+
+**_Screenshot: Synthesis Output_**
+
+![Screen Shot 2021-09-04 at 11 26 54 PM](https://user-images.githubusercontent.com/89927660/132115352-f3c7db8b-7a1c-4aa4-b5ac-52e12d7d60db.png)
+
+>_**Note:** It can be inferred that there is no Latch in the synthesized netlist as the case structure is complete (no presence of inferred latches)_
+
+**_Screenshot: GLS Output_**
+
+![Screen Shot 2021-09-04 at 11 31 42 PM](https://user-images.githubusercontent.com/89927660/132115350-36d494b8-3ac6-4a07-9b2e-542727765459.png)
+
+>_**Observation:** There is no latch observed in the output. The tool does not get confused. Hence there is a Synthesis Simulation Mismatch due to overlapping of legs in the code. Care must be taken to address the legs individually without any overlap (mutually exlusive code)_
 
 
 
