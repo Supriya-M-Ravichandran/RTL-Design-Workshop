@@ -1227,6 +1227,9 @@ $ gtkwave tb_ternary_operator_mux.vcd
 |1.|[IF STATEMENTS](#if-statements)|
 |2.|[CASE STATEMENTS](#case-statements)|
 |3.|[INCOMPLETE IF STATEMENTS](#incomplete-if-statements)|
+|4.|[INCOMPLETE CASE STATEMENTS](#incomplete-case-statements)|
+|5.|[FOR STATEMENTS](#for-statements)|
+|6.|[GENERATE STATEMENTS](#for-statements)|
 
 ### IF STATEMENTS
 
@@ -1434,7 +1437,7 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 >_**Note:** The synthesized design has a D Latch inferred due to incomplete if structure (missing else statement)._
 
-### PARTIAL CASE STATEMENTS
+### INCOMPLETE CASE STATEMENTS
 
 #### _CASE 1: incomplete case statements_
 
