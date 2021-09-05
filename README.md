@@ -1351,10 +1351,8 @@ end
 |Undergoes concept of priority.|No priority of segments in case structure|
 |Only one segment of the code will execute as it follows top-bottom approach sequentially.|May lead to Unpredictable outputs in bad case structures as there may be more than one segment executing the code. Thus, we should not have overlapping case statements. 
 
-### INCOMPLETE IF STATEMENTS
-
 ```
-//Steps Followed: 
+//Steps Followed for all the experiments: 
 //opening the file
 $ ls *incomp*
 $ gvim *incomp* -o
@@ -1371,22 +1369,25 @@ $ yosys
 //Read library 
 $ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
-$ read_verilog ternary_operator_mux.v
+$ read_verilog incomp_if.v.v
 //Synthesize Design - this controls which module to synthesize
-$ synth -top ternary_operator_mux
+$ synth -top incomp_if
 //Generate Netlist
 $ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
+//To write the netlist
+$ write_verilog -noattr incomp_if_net.v
 //PERFORMING GLS
 //Opening Verilog Models, Netlist and Test Bench
 $ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/
-sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
+sky130_fd_sc_hd.v incomp_if_net.v tb_incomp_if.v
 //To dump the VCD file
 $ ./a.out
 //To load the VCD file in GTKwaveform
-$ gtkwave tb_ternary_operator_mux.vcd
+$ gtkwave tb_incomp_if.vcd
 ```
+### INCOMPLETE IF STATEMENTS
 
 #### _CASE 1: incomplete if statements_
 
@@ -1539,9 +1540,9 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 ![Screen Shot 2021-09-04 at 11 31 42 PM](https://user-images.githubusercontent.com/89927660/132115350-36d494b8-3ac6-4a07-9b2e-542727765459.png)
 
->_**Observation:** There is no latch observed in the output. The tool does not get confused. Hence there is a Synthesis Simulation Mismatch due to overlapping of legs in the code. Care must be taken to address the legs individually without any overlap (mutually exlusive code)_
+>_**Observation:** There is no latch observed in the output. The synthesizer tool does not get confused. Hence there is a Synthesis Simulation Mismatch due to overlapping of legs in the code. Care must be taken to address the legs individually without any overlap (mutually exlusive code)_
 
-### FOR AND GENERATE STATEMENTS
+### FOR STATEMENTS
 
 #### _CASE 1: using generate if statement_
 
@@ -1564,31 +1565,109 @@ $ gtkwave tb_ternary_operator_mux.vcd
 |10|follows i2|
 |11|follows i3|
 
+#### _CASE 2: demux using case statement.v_
 
+**_Screenshot: Verilog file_**
 
+![Screen Shot 2021-09-05 at 11 53 48 AM](https://user-images.githubusercontent.com/89927660/132134949-e3a6f41f-9951-427c-8be2-6f9f409e802e.png)
 
+>_**Expected Behavior:** All the outputs are initialised to 0, to avoid inferring laches. Depending on the select line, the input is allocated to one of the outputs. _
 
+**_Screenshot: Simulation Output_**
 
+![Screen Shot 2021-09-05 at 12 07 29 PM](https://user-images.githubusercontent.com/89927660/132135459-7816c574-db47-4496-a538-14d212d3cbd6.png)
 
+>_**Observation:** It is a 1x8 multiplexer behavior which is given as mentioned below:
 
+|Select|i|
+|:---:|:---:|
+|000|follows o0|
+|001|follows o1|
+|010|follows o2|
+|011|follows o3|
+|100|follows o4|
+|101|follows o5|
+|110|follows o6|
+|111|follows o7|
 
+**_Screenshot: Synthesis Statistics Report_**
 
+![Screen Shot 2021-09-05 at 12 08 43 PM](https://user-images.githubusercontent.com/89927660/132135558-079f066c-a9c8-4141-ac1c-4d9bd1d120fa.png)
 
+**_Screenshot: Synthesis Output_**
 
+![Screen Shot 2021-09-05 at 12 09 13 PM](https://user-images.githubusercontent.com/89927660/132135563-9b89aaa8-3448-44d1-87f0-f793c7acc527.png)
 
+>_**Note:** It can be inferred that there is no Latch in the synthesized netlist as the case structure is complete (no presence of inferred latches)_
 
+**_Screenshot: GLS Output_**
 
+![Screen Shot 2021-09-05 at 12 12 40 PM](https://user-images.githubusercontent.com/89927660/132135595-c7c29683-fd3f-4cd4-9e50-b4f4b1ff1e4a.png)
 
+>_**Observation:** The observed waveform in simulation and synthesis matches and conforms code functionality._
 
+#### _CASE 3: demux using generate if statement.v_
 
+>_**Note:** The experiment of using demux with generate if statement functions same as of demux with case statement. However, the advantage of using generate if statements is the number of lines in the code which almost remains the same even if the input lines in demultiplexer increases._
 
+**_Screenshot: Verilog file_**
 
+![Screen Shot 2021-09-05 at 12 24 01 PM](https://user-images.githubusercontent.com/89927660/132135896-e4efeba9-b86c-4f4e-96c4-d20151d97652.png)
 
+**_Screenshot: Simulation Output_**
 
+![Screen Shot 2021-09-05 at 12 26 38 PM](https://user-images.githubusercontent.com/89927660/132135966-93f134be-122d-48a2-a2ba-45e6b81965ab.png)
 
+**_Screenshot: Synthesis Statistics Report_**
 
+![Screen Shot 2021-09-05 at 12 35 50 PM](https://user-images.githubusercontent.com/89927660/132136219-14057e13-2c62-40eb-9309-599ffcb75c86.png)
 
+**_Screenshot: Synthesis Output_**
 
+![Screen Shot 2021-09-05 at 12 36 22 PM](https://user-images.githubusercontent.com/89927660/132136222-52bcbf8b-8ef6-45e1-834f-abd57bcb2f28.png)
 
+**_Screenshot: GLS Output_**
 
+![Screen Shot 2021-09-05 at 12 38 40 PM](https://user-images.githubusercontent.com/89927660/132136226-5415ab92-a10b-4f89-9ca8-2c018de483b0.png)
 
+>_**Observation:** The observed waveform in simulation and synthesis matches and conforms code functionality._
+
+### GENERATE STATEMENTS
+
+#### Experiment on Ripple Carry Adder_
+
+>_**Note:** Instantiating the full adder in a loop to replicate the hardware_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-05 at 12 48 48 PM](https://user-images.githubusercontent.com/89927660/132136542-7241c146-9be8-4c59-8307-0f8f76673a37.png)
+
+>_**Note:** The output is always n+1 bits if both the inputs ate n bits. Since we are instantiating a full adder present in separate file, there is a need to tell the definition of full adder. It can also be seen that there is no always block used. The variable is genvar instead of integer._
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-05 at 12 56 30 PM](https://user-images.githubusercontent.com/89927660/132137158-7554ce78-5a46-4ea3-aa8f-a876ddaf129d.png)
+
+**_Screenshot: Synthesis Statistics Report_**
+
+![Screen Shot 2021-09-05 at 1 11 18 PM](https://user-images.githubusercontent.com/89927660/132137159-50399943-457b-4341-a514-6a50eb6d0253.png)
+
+**_Screenshot: Synthesis Output - rca_**
+
+>_**Note:** read_verilog for rca is performed before read_fa._
+
+![Screen Shot 2021-09-05 at 1 14 36 PM](https://user-images.githubusercontent.com/89927660/132137364-8bbe0f9e-059f-4684-8849-00154c90dcb6.png)
+
+**_Screenshot: Synthesis Output - fa_**
+
+![Screen Shot 2021-09-05 at 1 14 09 PM](https://user-images.githubusercontent.com/89927660/132137361-7702ede2-1de9-43a9-a8c4-7d523673cbb3.png)
+
+**_Screenshot: Commands for performing GLS**
+
+![Screen Shot 2021-09-05 at 1 17 12 PM](https://user-images.githubusercontent.com/89927660/132137382-8d8b38d5-65ed-4c6d-af6b-ffbe54d81710.png)
+
+**_Screenshot: GLS Output_**
+
+![Screen Shot 2021-09-05 at 1 21 36 PM](https://user-images.githubusercontent.com/89927660/132137370-6835d03a-9cb4-409a-8031-68424d9f1adb.png)
+
+>_**Observation:** The observed waveform in simulation and synthesis matches and conforms code functionality._
