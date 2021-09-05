@@ -1228,8 +1228,7 @@ $ gtkwave tb_ternary_operator_mux.vcd
 |2.|[CASE STATEMENTS](#case-statements)|
 |3.|[INCOMPLETE IF STATEMENTS](#incomplete-if-statements)|
 |4.|[INCOMPLETE CASE STATEMENTS](#incomplete-case-statements)|
-|5.|[FOR STATEMENTS](#for-statements)|
-|6.|[GENERATE STATEMENTS](#for-statements)|
+|5.|[FOR AND GENERATE STATEMENTS](#for-and-generate-statements)|
 
 ### IF STATEMENTS
 
@@ -1518,7 +1517,7 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 [Screen Shot 2021-09-04 at 11 12 34 PM](https://user-images.githubusercontent.com/89927660/132115407-c4412126-8e23-4247-b022-c53b7692285a.png)
 
->_**Expected Behavior:** Although the case structure is complete, there is overlapping of output when the select input is 10 or 11 and ? represented that the bit can be wither 0 or 1. Thus, the simulator may be confused._
+>_**Expected Behavior:** Although the case structure is not complete, there is overlapping of output when the select input is 10 or 11 and ? represented that the bit can be wither 0 or 1. Thus, the simulator may be confused._
 
 **_Screenshot: Simulation Output_**
 
@@ -1542,6 +1541,28 @@ $ gtkwave tb_ternary_operator_mux.vcd
 
 >_**Observation:** There is no latch observed in the output. The tool does not get confused. Hence there is a Synthesis Simulation Mismatch due to overlapping of legs in the code. Care must be taken to address the legs individually without any overlap (mutually exlusive code)_
 
+### FOR AND GENERATE STATEMENTS
+
+#### _CASE 1: using generate if statement_
+
+**_Screenshot: Verilog file_**
+
+![Screen Shot 2021-09-05 at 8 49 51 AM](https://user-images.githubusercontent.com/89927660/132129900-ce94545c-870a-4ff4-9383-75d3f05d68ff.png)
+
+>_**Expected Behavior:** The structure is complete and expected to behave as a 4x1 multiplexer_
+
+**_Screenshot: Simulation Output_**
+
+![Screen Shot 2021-09-05 at 8 52 42 AM](https://user-images.githubusercontent.com/89927660/132129937-56e67283-0b21-4441-b211-413a139f4740.png)
+
+>_**Observation:** It is a 4x1 multiplexer behavior which is given as mentioned below:
+
+|Select|Output y|
+|:---:|:---:|
+|00|follows i0|
+|01|follows i1|
+|10|follows i2|
+|11|follows i3|
 
 
 
