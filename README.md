@@ -1640,7 +1640,7 @@ $ gtkwave tb_incomp_if.vcd
 
 **_Screenshot: Verilog file_**
 
-![Screen Shot 2021-09-05 at 12 48 48 PM](https://user-images.githubusercontent.com/89927660/132136542-7241c146-9be8-4c59-8307-0f8f76673a37.png)
+![Screen Shot 2021-09-05 at 1 26 25 PM](https://user-images.githubusercontent.com/89927660/132137481-9ed5e2a4-4c5b-4457-9fc8-0a09131fbbc5.png)
 
 >_**Note:** The output is always n+1 bits if both the inputs ate n bits. Since we are instantiating a full adder present in separate file, there is a need to tell the definition of full adder. It can also be seen that there is no always block used. The variable is genvar instead of integer._
 
