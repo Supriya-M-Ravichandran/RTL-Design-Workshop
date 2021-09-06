@@ -77,7 +77,7 @@ $ git clone https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
 ![Screen Shot 2021-09-04 at 4 50 00 AM](https://user-images.githubusercontent.com/89927660/132090267-473a8ae1-ec52-4979-9e60-5cc0b05a0e6e.png)
 
 #### _Mux - Working:_
-The multiplexer (MUX) is a combinational logic circuit which is designed to switch one of the several input lines through to a single common output. The input A acts to control which input (either I0 or I1) gets passed to the output Q. A good mux when the data select input A is at logic 0, input I1 passes its data to the output, while I0 is blocked. When the input is at logic 1, input I0 passes its data to the output, while I1 is blocked. Output Expression is given as Q = A'I1 + A I0.
+The multiplexer (MUX) is a combinational logic circuit which is designed to switch one of the several input lines through to a single common output. The input A acts to control which input (either I0 or I1) gets passed to the output Q. A good mux - when the data select input A is at logic 0, input I1 passes its data to the output, while I0 is blocked. When the input is at logic 1, input I0 passes its data to the output, while I1 is blocked. Output Expression is given as Q = A'I1 + A I0.
 
 ### GOOD MUX IMPLEMENTATION USING IVERILOG
 
@@ -141,13 +141,13 @@ Fast and Slow cells comes with its own advantages and disadvantages when we cons
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__t_025C_1v80.lib
 //Read Design
 $ read_verilog good_mux.v
 //Synthesize Design
 $ synth -top good_mux
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Realizing Graphical Version of Logic
 $ show
 //Writing the netlist in a crisp manner 
@@ -266,13 +266,13 @@ $ gvim multiple_modules.v
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
 $ read_verilog multiple_modules.v
 //Synthesize Design
 $ synth -top multiple_modules
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__t_025C_1v80.lib
 //Realizing Graphical Version of Logic for multiple modules
 $ show multiple_modules
 //Writing the netlist in a crisp manner 
@@ -425,7 +425,7 @@ $ gtkwave tb_dff_asyncres.vcd
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
 $ read_verilog dff_asyncres.v
 //Synthesize Design - this controls which module to synthesize
@@ -433,9 +433,9 @@ $ synth -top dff_asyncres
 //There will be a separate flop library under a standard library
 //so we need to tell the design where to specifically pick up the DFF
 //But here we point back to the same library and tool looks only for DFF instead of all cells
-$ dfflibmap -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ dfflibmap -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 //Writing the netlist in a crisp manner 
@@ -464,13 +464,13 @@ $ gvim mult_*.v -o
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
 $ read_verilog mult_2.v
 //Synthesize Design - this controls which module to synthesize
 $ synth -top mul2
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 //Writing the netlist in a crisp manner 
@@ -564,7 +564,7 @@ $ ls *opt_check*
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
 $ read_verilog opt_check.v
 //Synthesize Design - this controls which module to synthesize
@@ -572,7 +572,7 @@ $ synth -top opt_check
 //To perform constant propogation optimization
 $ opt_clean -purge
 //Generate Netlist
-$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Realizing Graphical Version of Logic for single modules
 $ show 
 ```
@@ -814,7 +814,7 @@ $ gvim counter_opt.v
 //Invoke Yosys
 $ yosys
 //Read library 
-$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd_-tt_025C_1v80.lib
+$ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
 $ read_verilog opt_check.v
 //Synthesize Design - this controls which module to synthesize
@@ -1228,7 +1228,8 @@ $ gtkwave tb_ternary_operator_mux.vcd
 |2.|[CASE STATEMENTS](#case-statements)|
 |3.|[INCOMPLETE IF STATEMENTS](#incomplete-if-statements)|
 |4.|[INCOMPLETE CASE STATEMENTS](#incomplete-case-statements)|
-|5.|[FOR AND GENERATE STATEMENTS](#for-and-generate-statements)|
+|5.|[STATEMENTS USING FOR](#statements-using-for)|
+|6.|[STATEMENTS USING GENERATE](#statements-using-generate)|
 
 ### IF STATEMENTS
 
@@ -1369,7 +1370,7 @@ $ yosys
 //Read library 
 $ read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 //Read Design
-$ read_verilog incomp_if.v.v
+$ read_verilog incomp_if.v
 //Synthesize Design - this controls which module to synthesize
 $ synth -top incomp_if
 //Generate Netlist
@@ -1542,7 +1543,14 @@ $ gtkwave tb_incomp_if.vcd
 
 >_**Observation:** There is no latch observed in the output. The synthesizer tool does not get confused. Hence there is a Synthesis Simulation Mismatch due to overlapping of legs in the code. Care must be taken to address the legs individually without any overlap (mutually exlusive code)_
 
-### FOR STATEMENTS
+### STATEMENTS USING FOR
+
+#### _Understanding the Usage of For and Generate Statements:_
+
+|FOR STATEMENTS|GENERATE STATEMENTS|
+|:---:|:---:|
+|These statements are used inside the always block|These statements are used outsde the always block|
+|Used for evaluating expressions|Used for instantiating/replicating Hardwares|
 
 #### _CASE 1: using generate if statement_
 
@@ -1571,7 +1579,7 @@ $ gtkwave tb_incomp_if.vcd
 
 ![Screen Shot 2021-09-05 at 11 53 48 AM](https://user-images.githubusercontent.com/89927660/132134949-e3a6f41f-9951-427c-8be2-6f9f409e802e.png)
 
->_**Expected Behavior:** All the outputs are initialised to 0, to avoid inferring laches. Depending on the select line, the input is allocated to one of the outputs. _
+>_**Expected Behavior:** All the outputs are initialised to 0, to avoid inferring laches. Depending on the select line, the input is allocated to one of the outputs._
 
 **_Screenshot: Simulation Output_**
 
@@ -1632,7 +1640,7 @@ $ gtkwave tb_incomp_if.vcd
 
 >_**Observation:** The observed waveform in simulation and synthesis matches and conforms code functionality._
 
-### GENERATE STATEMENTS
+### STATEMENTS USING GENERATE
 
 #### Experiment on Ripple Carry Adder_
 
