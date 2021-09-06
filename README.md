@@ -1577,7 +1577,7 @@ $ gtkwave tb_incomp_if.vcd
 
 **_Screenshot: Verilog file_**
 
-![Screen Shot 2021-09-05 at 11 53 48 AM](https://user-images.githubusercontent.com/89927660/132134949-e3a6f41f-9951-427c-8be2-6f9f409e802e.png)
+![Screen Shot 2021-09-05 at 11 41 16 PM](https://user-images.githubusercontent.com/89927660/132161659-389ddef4-3c6b-47f7-b572-b79743d0872d.png)
 
 >_**Expected Behavior:** All the outputs are initialised to 0, to avoid inferring laches. Depending on the select line, the input is allocated to one of the outputs._
 
